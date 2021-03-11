@@ -1,3 +1,4 @@
+#try2
 def dna_count(dna):
     dna = dna.upper() # convert string to uppercase before counting
     count_A = dna.count('A') 
