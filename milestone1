@@ -1,0 +1,163 @@
+def dna_count(dna):
+    dna = dna.upper() # convert string to uppercase before counting
+    count_A = dna.count('A') 
+    count_C = dna.count('C') 
+    count_G = dna.count('G') 
+    count_T = dna.count('T')
+    return count_A,count_C,count_G,count_T 
+
+def dna2rna(dna):
+    dna = dna.upper() # convert string to uppercase
+    rna = '' # empty RNA string
+    # keep A, G and C the same, convert T to U, add to RNA
+    for symbol in dna:
+        if symbol == 'A':
+            rna = rna + 'A'
+        elif symbol == 'T':
+            rna = rna + 'U' 
+        elif symbol == 'C':
+            rna = rna + 'C' 
+        elif symbol == 'G':
+            rna = rna + 'G' 
+    return rna
+
+def reverse_complement(dna):
+    dna = dna.upper()
+    dna = dna[::-1] # reverse the string
+    r_complement = '' # empty reverse complement string
+    for symbol in dna: # change symbol to complement and add to string
+        if symbol == 'A':
+            r_complement = r_complement + 'T'
+        elif symbol == 'T':
+            r_complement = r_complement + 'A' 
+        elif symbol == 'G':
+            r_complement = r_complement + 'C' 
+        elif symbol == 'C':
+            r_complement = r_complement + 'G' 
+    return r_complement
+
+def mendels_law(hom, het, rec):
+    
+    total = hom + het + rec # count total number of organisms
+    
+    both_hom = (hom/total)*((hom-1)/(total-1)) # probability that both organisms chosen are homozygous dominant
+    both_het = (het/total)*((het-1)/(total-1))
+
+    hom1_het1 = (hom/total)*(het/(total-1)) + (het/total)*(hom/(total-1)) # 1 is homozygous dominant and 1 is heterozygous
+    hom1_rec1 = (hom/total)*(rec/(total-1)) + (rec/total)*(hom/(total-1))
+    het1_rec1 = (het/total)*(rec/(total-1)) + (rec/total)*(het/(total-1))
+    
+    # both_hom, hom1_het1 and hom1_rec1 create only dominant alleles
+    # both_het creates dominant alleles 75% of the time
+    # het1_rec1 creates dominant alleles 50% of the time
+    
+    # probability of dominant allele  = sum of all probabilities x percentages
+    dominant_probability = both_hom + (0.75*both_het) + (hom1_het1) + (hom1_rec1) + (0.5*het1_rec1)
+    
+def fibonacci_rabbits(n, k):
+#Set variables for fibonacci seq
+    f1, f2 = 1, 1
+#Code for fibonacci seq w/ n as months and k as rabbit pairs
+    for i in range(n - 1):
+        f2, f1 = f1, f1 + (f2 * k)
+    print(f2)
+    return f2
+#example used on rubric
+
+genome = ["CCTGCGGAAGATCGGCACTAGAATAGCCAGAACCGTTTCTCTGAGGCTTCCGGCCTTCCCTCCCACTAATAATTCTGAGG",
+          "CCATCGGTAGCGCATCCTTAGTCCAATTAAGTCCCTATCCAGGCGCTCCGCCGAAGGTCTATATCCATTTGTCAGCAGACACGC",
+          "CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGACTGGGAACCTGCGGGCAGTAGGTGGAAT"]
+
+def GC_content(dna_list):
+    for dna in dna_list:
+#first set sum of G and C to zero
+        a = 0
+#make an empty list
+        l = []
+        if (dna.count('C')+dna.count('G'))/len(dna)>0:
+#if there are G's and C's then a is percentage and b is line with most C's and G's
+            b = dna_list.index(dna)
+            a = (dna.count('C')+dna.count('G'))/len(dna)
+            l.extend([b, round(a*100,6)])
+    return tuple(l)
+
+#Calling the function
+
+def rna2codon(rna): 
+#rna to codon dictionary
+    table = {"UUU":"F", "UUC":"F", "UUA":"L", "UUG":"L",
+    "UCU":"S", "UCC":"s", "UCA":"S", "UCG":"S",
+    "UAU":"Y", "UAC":"Y", "UAA":"STOP", "UAG":"STOP",
+    "UGU":"C", "UGC":"C", "UGA":"STOP", "UGG":"W",
+    "CUU":"L", "CUC":"L", "CUA":"L", "CUG":"L",
+    "CCU":"P", "CCC":"P", "CCA":"P", "CCG":"P",
+    "CAU":"H", "CAC":"H", "CAA":"Q", "CAG":"Q",
+    "CGU":"R", "CGC":"R", "CGA":"R", "CGG":"R",
+    "AUU":"I", "AUC":"I", "AUA":"I", "AUG":"M",
+    "ACU":"T", "ACC":"T", "ACA":"T", "ACG":"T",
+    "AAU":"N", "AAC":"N", "AAA":"K", "AAG":"K",
+    "AGU":"S", "AGC":"S", "AGA":"R", "AGG":"R",
+    "GUU":"V", "GUC":"V", "GUA":"V", "GUG":"V",
+    "GCU":"A", "GCC":"A", "GCA":"A", "GCG":"A",
+    "GAU":"D", "GAC":"D", "GAA":"E", "GAG":"E",
+    "GGU":"G", "GGC":"G", "GGA":"G", "GGG":"G",}
+#set protein to an empty string so it can be added onto
+    protein = "" 
+#rna string must be divisible by 3
+    if len(rna)%3 == 0: 
+#divide the string into 3's and convert them to their corresponding letters, adding them onto new string
+        for i in range(0, len(rna), 3): 
+            amino = rna[i:i + 3]
+            protein += table[amino] 
+            
+    return protein
+#print example from rubric
+
+def locate_substring(dna_snippet,dna):
+#the section is the where the dna_snippet is found in the dna
+        space = [i for i in range(len(dna_snippet)) if dna_snippet.startswith(dna, i)] 
+        return space
+
+def count_dom_phenotype(genotypes):
+#multiplying frequency of each type of pairing by its expected value times 2 children
+    onea=2*genotypes[0]
+    twoa=2*genotypes[1]
+    threea=2*genotypes[2]
+    foura=1.5*genotypes[3]
+    fivea=0.5*genotypes[4]
+    return onea+twoa+threea+foura+fivea
+
+def source_rna(protein):
+    perm=1 #initial permutations that will get multiplied
+    freq=[] # empty set for frequency
+    genetic_code = {
+        'UUU': 'F', 'UUC': 'F', 'UUA': 'L', 'UUG': 'L',        'CUU': 'L', 'CUC': 'L', 'CUA': 'L', 'CUG': 'L',
+        'AUU': 'I', 'AUC': 'I', 'AUA': 'I', 'AUG': 'M',        'GUU': 'V', 'GUC': 'V', 'GUA': 'V', 'GUG': 'V',
+
+        'UCU': 'S', 'UCC': 'S', 'UCA': 'S', 'UCG': 'S',        'CCU': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
+        'ACU': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',        'GCU': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
+
+        'UAU': 'Y', 'UAC': 'Y', 'UAA': '*', 'UAG': '*',        'CAU': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
+        'AAU': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',        'GAU': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
+
+        'UGU': 'C', 'UGC': 'C', 'UGA': '*', 'UGG': 'W',        'CGU': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
+        'AGU': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',        'GGU': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',
+    }
+    genetic_list=list(genetic_code)
+    for i in range(len(protein)):
+        freq.append(0) #add empty set for frequency of that protein in the genetic code
+        for g in range(len(genetic_code)):
+            if genetic_code[genetic_list[g]]==protein[i]: # loop to sum codons that make the protein
+                freq[i]+=1
+        perm=perm*freq[i] #multiply the frequencies of each protein to make permutations
+    return(perm*3) #multiply by 3 different stop codons
+
+def splice_rna(dna, intron_list):
+    edna=dna #copying dna to edit it later
+    codons="" 
+    for i in range(0, len(intron_list)):
+        edna=edna.replace(intron_list[i], "") #getting rid of each intron in the dna
+    rna=dna2rna(edna) #converting new dna to rna
+    codons+=rna2codon(rna)    # converting rna to codons
+    nonstop = codons.replace("STOP", "")  # getting rid of stops in codon
+    return nonstop
